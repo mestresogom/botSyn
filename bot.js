@@ -9,6 +9,8 @@ if (!TOKEN) {
 
 // TROQUE PELO ID REAL DA ROLE QUE REPRESENTA @.|.M.|.
 const MESTRES_ROLE_ID = '546834826989273088';
+// ID do canal de prontuário (Fórum ou texto)
+const PRONTUARIO_CHANNEL_ID = '1492159823872135248';
 
 const client = new Client({
   intents: [
@@ -197,6 +199,87 @@ client.once('ready', () => {
   console.log(`Bot logado como ${client.user.tag}`);
 });
 
+
+async function enviarParaProntuario(message, reportText) {
+  const guild = message.guild;
+  if (!guild) return;
+  if (!PRONTUARIO_CHANNEL_ID) return;
+
+  const prontuarioChannel = guild.channels.cache.get(PRONTUARIO_CHANNEL_ID);
+  if (!prontuarioChannel) return;
+
+  // Nome que vamos usar para identificar o prontuário
+  const threadName = message.author.tag; // ou só message.author.username
+
+  // CASO 1: canal de FÓRUM
+  if (prontuarioChannel.type === 15 /* GuildForum */) {
+    // Procurar tópico existente com o mesmo nome
+    await prontuarioChannel.threads.fetchActive();
+    await prontuarioChannel.threads.fetchArchived();
+
+    let existingThread = prontuarioChannel.threads.cache.find(
+      t => t.name === threadName
+    );
+
+    if (!existingThread) {
+      // Cria novo tópico
+      existingThread = await prontuarioChannel.threads.create({
+        name: threadName,
+        message: {
+          content: `Prontuário de ${message.author} iniciado.`
+        }
+      });
+    }
+
+    // Envia o relatório no tópico
+    if (reportText.length > 1800) {
+      await existingThread.send('Relatório de entrevista:\n```txt');
+      for (let i = 0; i < reportText.length; i += 1800) {
+        const chunk = reportText.slice(i, i + 1800);
+        await existingThread.send(chunk);
+      }
+      await existingThread.send('```');
+    } else {
+      await existingThread.send('Relatório de entrevista:\n```txt\n' + reportText + '\n```');
+    }
+
+    return;
+  }
+
+  // CASO 2: canal de TEXTO normal com THREADS
+  if (prontuarioChannel.isTextBased && prontuarioChannel.isTextBased()) {
+    // Buscar threads (ativas + arquivadas)
+    await prontuarioChannel.threads.fetchActive();
+    await prontuarioChannel.threads.fetchArchived();
+
+    let existingThread = prontuarioChannel.threads.cache.find(
+      t => t.name === threadName
+    );
+
+    if (!existingThread) {
+      existingThread = await prontuarioChannel.threads.create({
+        name: threadName,
+        type: 11, // public thread
+        autoArchiveDuration: 10080, // 7 dias
+        reason: `Prontuário de ${message.author.tag}`
+      });
+    }
+
+    if (reportText.length > 1800) {
+      await existingThread.send('Relatório de entrevista:\n```txt');
+      for (let i = 0; i < reportText.length; i += 1800) {
+        const chunk = reportText.slice(i, i + 1800);
+        await existingThread.send(chunk);
+      }
+      await existingThread.send('```');
+    } else {
+      await existingThread.send('Relatório de entrevista:\n```txt\n' + reportText + '\n```');
+    }
+  }
+}
+
+
+
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return;
@@ -329,6 +412,9 @@ client.on('messageCreate', async (message) => {
     await message.channel.send(header + '```txt\n' + reportText + '```');
   }
 
+  // salvar no prontuário
+  await enviarParaProntuario(message, reportText);
+  
   await message.reply(
     'Entrevista concluída.\n' +
     'Suas respostas foram registradas e os .|.M.|. serão acionados para avaliação.'
