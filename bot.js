@@ -208,8 +208,10 @@ async function enviarParaProntuario(message, reportText) {
   const prontuarioChannel = guild.channels.cache.get(PRONTUARIO_CHANNEL_ID);
   if (!prontuarioChannel) return;
 
-  // Nome que vamos usar para identificar o prontuário
-  const threadName = message.author.tag; // ou só message.author.username
+  // Nome que vamos usar para identificar o prontuário  // Usa apelido do servidor se existir, senão username
+  const member = message.member ?? await guild.members.fetch(message.author.id).catch(() => null);
+  const displayName = member ? member.displayName : message.author.username;
+  const threadName = displayName; // ex: .|.Neo.|.Nome.|.
 
   // CASO 1: canal de FÓRUM
   if (prontuarioChannel.type === 15 /* GuildForum */) {
@@ -278,6 +280,51 @@ async function enviarParaProntuario(message, reportText) {
   }
 }
 
+async function getOrCreateProntuarioThread(guild, user) {
+  if (!PRONTUARIO_CHANNEL_ID) return null;
+  const prontuarioChannel = guild.channels.cache.get(PRONTUARIO_CHANNEL_ID);
+  if (!prontuarioChannel) return null;
+
+  const member = await guild.members.fetch(user.id).catch(() => null);
+  const displayName = member ? member.displayName : user.username;
+  const threadName = displayName;
+
+  // Fórum
+  if (prontuarioChannel.type === 15) { // GuildForum
+    await prontuarioChannel.threads.fetchActive();
+    await prontuarioChannel.threads.fetchArchived();
+
+    let thread = prontuarioChannel.threads.cache.find(t => t.name === threadName);
+    if (!thread) {
+      thread = await prontuarioChannel.threads.create({
+        name: threadName,
+        message: {
+          content: `Prontuário de ${user} iniciado.`
+        }
+      });
+    }
+    return thread;
+  }
+
+  // Canal de texto com threads
+  if (prontuarioChannel.isTextBased && prontuarioChannel.isTextBased()) {
+    await prontuarioChannel.threads.fetchActive();
+    await prontuarioChannel.threads.fetchArchived();
+
+    let thread = prontuarioChannel.threads.cache.find(t => t.name === threadName);
+    if (!thread) {
+      thread = await prontuarioChannel.threads.create({
+        name: threadName,
+        type: 11, // public thread
+        autoArchiveDuration: 10080,
+        reason: `Prontuário de ${user.tag}`
+      });
+    }
+    return thread;
+  }
+
+  return null;
+}
 
 
 client.on('messageCreate', async (message) => {
@@ -332,6 +379,26 @@ client.on('messageCreate', async (message) => {
       return;
     }
     
+    // Comando !prontuario @alguem
+    if (command === 'prontuario') {
+      const target =
+        message.mentions.users.first() ||
+        (args[0] ? await message.client.users.fetch(args[0]).catch(() => null) : null);
+  
+      if (!target) {
+        await message.reply('Indique alguém. Exemplo: `!prontuario @usuario` ou `!prontuario ID`.');
+        return;
+      }
+  
+      const thread = await getOrCreateProntuarioThread(message.guild, target);
+      if (!thread) {
+        await message.reply('Não consegui acessar o canal de prontuário. Verifique o ID e as permissões do bot.');
+        return;
+      }
+  
+      await message.reply(`Prontuário de ${target}: ${thread.url}`);
+      return;
+    }
     return;
   }
   
