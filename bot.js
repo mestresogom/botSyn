@@ -188,9 +188,8 @@ const FRASES = [
 
 
 
-// chave: `${channelId}:${userId}` -> { index, answers }
+// sessões: chave `${channelId}:${userId}` -> { index, answers, ... }
 const sessions = new Map();
-
 function sessionKey(channelId, userId) {
   return `${channelId}:${userId}`;
 }
@@ -199,7 +198,7 @@ client.once('ready', () => {
   console.log(`Bot logado como ${client.user.tag}`);
 });
 
-
+// Envia relatório para o canal de prontuário (fórum ou texto+thread)
 async function enviarParaProntuario(message, reportText) {
   const guild = message.guild;
   if (!guild) return;
@@ -208,32 +207,23 @@ async function enviarParaProntuario(message, reportText) {
   const prontuarioChannel = guild.channels.cache.get(PRONTUARIO_CHANNEL_ID);
   if (!prontuarioChannel) return;
 
-  // Nome que vamos usar para identificar o prontuário  // Usa apelido do servidor se existir, senão username
   const member = message.member ?? await guild.members.fetch(message.author.id).catch(() => null);
   const displayName = member ? member.displayName : message.author.username;
-  const threadName = displayName; // ex: .|.Neo.|.Nome.|.
+  const threadName = displayName;
 
-  // CASO 1: canal de FÓRUM
-  if (prontuarioChannel.type === 15 /* GuildForum */) {
-    // Procurar tópico existente com o mesmo nome
+  // Fórum
+  if (prontuarioChannel.type === 15) {
     await prontuarioChannel.threads.fetchActive();
     await prontuarioChannel.threads.fetchArchived();
 
-    let existingThread = prontuarioChannel.threads.cache.find(
-      t => t.name === threadName
-    );
-
+    let existingThread = prontuarioChannel.threads.cache.find(t => t.name === threadName);
     if (!existingThread) {
-      // Cria novo tópico
       existingThread = await prontuarioChannel.threads.create({
         name: threadName,
-        message: {
-          content: `Prontuário de ${message.author} iniciado.`
-        }
+        message: { content: `Prontuário de ${message.author} iniciado.` }
       });
     }
 
-    // Envia o relatório no tópico
     if (reportText.length > 1800) {
       await existingThread.send('Relatório de entrevista:\n```txt');
       for (let i = 0; i < reportText.length; i += 1800) {
@@ -244,25 +234,20 @@ async function enviarParaProntuario(message, reportText) {
     } else {
       await existingThread.send('Relatório de entrevista:\n```txt\n' + reportText + '\n```');
     }
-
     return;
   }
 
-  // CASO 2: canal de TEXTO normal com THREADS
+  // Canal de texto com threads
   if (prontuarioChannel.isTextBased && prontuarioChannel.isTextBased()) {
-    // Buscar threads (ativas + arquivadas)
     await prontuarioChannel.threads.fetchActive();
     await prontuarioChannel.threads.fetchArchived();
 
-    let existingThread = prontuarioChannel.threads.cache.find(
-      t => t.name === threadName
-    );
-
+    let existingThread = prontuarioChannel.threads.cache.find(t => t.name === threadName);
     if (!existingThread) {
       existingThread = await prontuarioChannel.threads.create({
         name: threadName,
-        type: 11, // public thread
-        autoArchiveDuration: 10080, // 7 dias
+        type: 11,
+        autoArchiveDuration: 10080,
         reason: `Prontuário de ${message.author.tag}`
       });
     }
@@ -280,6 +265,7 @@ async function enviarParaProntuario(message, reportText) {
   }
 }
 
+// Pegar/criar thread/tópico de prontuário para um usuário
 async function getOrCreateProntuarioThread(guild, user) {
   if (!PRONTUARIO_CHANNEL_ID) return null;
   const prontuarioChannel = guild.channels.cache.get(PRONTUARIO_CHANNEL_ID);
@@ -290,7 +276,7 @@ async function getOrCreateProntuarioThread(guild, user) {
   const threadName = displayName;
 
   // Fórum
-  if (prontuarioChannel.type === 15) { // GuildForum
+  if (prontuarioChannel.type === 15) {
     await prontuarioChannel.threads.fetchActive();
     await prontuarioChannel.threads.fetchArchived();
 
@@ -298,9 +284,7 @@ async function getOrCreateProntuarioThread(guild, user) {
     if (!thread) {
       thread = await prontuarioChannel.threads.create({
         name: threadName,
-        message: {
-          content: `Prontuário de ${user} iniciado.`
-        }
+        message: { content: `Prontuário de ${user} iniciado.` }
       });
     }
     return thread;
@@ -315,7 +299,7 @@ async function getOrCreateProntuarioThread(guild, user) {
     if (!thread) {
       thread = await prontuarioChannel.threads.create({
         name: threadName,
-        type: 11, // public thread
+        type: 11,
         autoArchiveDuration: 10080,
         reason: `Prontuário de ${user.tag}`
       });
@@ -326,22 +310,19 @@ async function getOrCreateProntuarioThread(guild, user) {
   return null;
 }
 
-
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return;
 
   const channelId = message.channel.id;
   const userId = message.author.id;
-  //const key = sessionKey(channelId, userId);
 
-  // 1 Comandos
-    if (message.content.startsWith(PREFIX)) {
+  // 1) COMANDOS
+  if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
     const command = args.shift()?.toLowerCase();
 
     if (command === 'entrevistaentrada') {
-      // alvo da entrevista: @fulano se houver menção, senão quem chamou
       const targetMember =
         message.mentions.members.first() ||
         (args[0]
@@ -354,9 +335,9 @@ client.on('messageCreate', async (message) => {
       }
 
       const target = targetMember.user;
-      const key = sessionKey(channelId, target.id);
+      const keyEntrevista = sessionKey(channelId, target.id);
 
-      if (sessions.has(key)) {
+      if (sessions.has(keyEntrevista)) {
         await message.reply(
           `Já existe uma entrevista em andamento neste canal para ${target}. ` +
           'Peça para a pessoa responder às perguntas ou digitar "CANCELAR" para encerrar.'
@@ -364,7 +345,7 @@ client.on('messageCreate', async (message) => {
         return;
       }
 
-      sessions.set(key, {
+      sessions.set(keyEntrevista, {
         index: 0,
         answers: [],
         entrevistadoId: target.id,
@@ -387,10 +368,38 @@ client.on('messageCreate', async (message) => {
       await message.channel.send(intro);
       return;
     }
+
+    if (command === 'frase') {
+      const random = FRASES[Math.floor(Math.random() * FRASES.length)];
+      await message.channel.send(random);
+      return;
+    }
+
+    if (command === 'prontuario') {
+      const targetUser =
+        message.mentions.users.first() ||
+        (args[0] ? await message.client.users.fetch(args[0]).catch(() => null) : null);
+
+      if (!targetUser) {
+        await message.reply('Indique alguém. Exemplo: `!prontuario @usuario` ou `!prontuario ID`.');
+        return;
+      }
+
+      const thread = await getOrCreateProntuarioThread(message.guild, targetUser);
+      if (!thread) {
+        await message.reply('Não consegui acessar o canal de prontuário. Verifique o ID e as permissões do bot.');
+        return;
+      }
+
+      await message.reply(`Prontuário de ${targetUser}: ${thread.url}`);
+      return;
+    }
+
+    return;
   }
 
-  // 2) SESSÃO: agora o entrevistado é quem responde
-  const key = sessionKey(channelId, userId); // chave = canal + quem está falando
+  // 2) SESSÃO: entrevistado é quem responde
+  const key = sessionKey(channelId, userId);
   const session = sessions.get(key);
 
   // Se NÃO está em entrevista, mas mencionou o bot → responde FRASE
@@ -400,7 +409,7 @@ client.on('messageCreate', async (message) => {
     return;
   }
 
-  // Se não tem sessão e não é menção → ignora
+  // Se não tem sessão e não é menção -> ignora
   if (!session) return;
 
   const content = message.content.trim();
@@ -427,7 +436,7 @@ client.on('messageCreate', async (message) => {
     return;
   }
 
-  // Finalizou — monta relatório legível
+  // Finalizou — monta relatório
   const now = new Date();
   const dataISO = now.toISOString();
 
@@ -447,8 +456,7 @@ client.on('messageCreate', async (message) => {
 
   sessions.delete(key);
 
-  // Obter menção verdadeira da role .|.M.|.
-  let mestresMention = '@.|.M.|.'; // fallback textual
+  let mestresMention = '@.|.M.|.';
   if (MESTRES_ROLE_ID) {
     const role = message.guild.roles.cache.get(MESTRES_ROLE_ID);
     if (role) mestresMention = role.toString();
@@ -456,7 +464,6 @@ client.on('messageCreate', async (message) => {
 
   const header = `${mestresMention} Relatório de entrevista de ${message.author}:\n`;
 
-  // Se for muito longo, dividir em blocos
   if (reportText.length > 1800) {
     await message.channel.send(header);
     for (let i = 0; i < reportText.length; i += 1800) {
@@ -467,9 +474,8 @@ client.on('messageCreate', async (message) => {
     await message.channel.send(header + '```txt\n' + reportText + '```');
   }
 
-  // salvar no prontuário
   await enviarParaProntuario(message, reportText);
-  
+
   await message.reply(
     'Entrevista concluída.\n' +
     'Suas respostas foram registradas e os .|.M.|. serão acionados para avaliação.'
