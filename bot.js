@@ -263,8 +263,6 @@ client.on('messageCreate', async (message) => {
   }
 
   // 3) SE ESTÁ EM ENTREVISTA, TRATA A RESPOSTA NORMALMENTE
-  if (!session) return; // não tem sessão nem menção -> ignora
-  const session = sessions.get(key);
   if (!session) return;
 
   const content = message.content.trim();
