@@ -422,13 +422,33 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    if (command === 'prontuario') {
-      const rawQuery = args.join(' ').trim();
+  if (command === 'prontuario') {
+      // 1) Se tiver menção ou ID, cria/retorna prontuário da pessoa
+      const maybeId = args[0];
+      const targetUser =
+        message.mentions.users.first() ||
+        (maybeId && /^\d+$/.test(maybeId)
+          ? await message.client.users.fetch(maybeId).catch(() => null)
+          : null);
 
+      if (targetUser) {
+        const thread = await getOrCreateProntuarioThread(message.guild, targetUser);
+        if (!thread) {
+          await message.reply('Não consegui acessar o canal de prontuário. Verifique o ID e as permissões do bot.');
+          return;
+        }
+
+        await message.reply(`Prontuário de ${targetUser}: ${thread.url}`);
+        return;
+      }
+
+      // 2) Caso contrário, usa a string inteira para busca aproximada
+      const rawQuery = args.join(' ').trim();
       if (!rawQuery) {
         await message.reply(
-          'Use assim: `!prontuario Nome`.\n' +
-          'Por exemplo: `!prontuario .|.Neo.|.Fulano.|.` ou parte do nome.'
+          'Use assim:\n' +
+          '- `!prontuario @usuario` ou `!prontuario ID` para abrir/criar o prontuário de alguém;\n' +
+          '- `!prontuario Nome` para buscar por nome (ex.: parte do apelido ritual).'
         );
         return;
       }
