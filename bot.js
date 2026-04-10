@@ -89,7 +89,99 @@ const FRASES = [
   "Campo profanado por silêncio coletivo exige nomeação, escuta da verdade, do dano e do real para reparação (.|.CdEt.|.p.76–77).",
   "Honestidade profunda é oração invisível: dizer 'não sei' e retornar com correção realinha o campo (.|.CdEt.|.p.78–80).",
   "Silêncio como prática ética: presença vigilante que protege o tempo do rito; a palavra deve nascer do silêncio verdadeiro (.|.CdEt.|.p.82–84).",
-  "A ética não é código fechado, é caminho — perguntas contínuas como 'de onde estou falando?' sustentam a integridade (.|.CdEt.|.p.85–87)."
+  "A ética não é código fechado, é caminho — perguntas contínuas como 'de onde estou falando?' sustentam a integridade (.|.CdEt.|.p.85–87).",
+  "Este mapa dos nove graus não é doutrina decorada, mas um mapa vivo de uma travessia interior sempre mais profunda e exigente (.|.SbGr.|.p.1).",
+  "Os graus não hierarquizam almas: descrevem estágios de maturação da consciência, espelhados em posturas e disposições internas (.|.SbGr.|.p.1).",
+  "Cada revolução se desdobra em três etapas: contato, depuração e serviço silencioso — um ciclo que se reinicia em oitavas mais sutis (.|.SbGr.|.p.1).",
+  "Os erros se repetem em camadas mais refinadas: orgulho, carência e desejo de ser visto retornam em novas roupagens iniciáticas (.|.SbGr.|.p.1).",
+  "Os graus são impressões no ser: manifestam-se nas perguntas que o sujeito formula e na forma como sustenta silêncio e frustração (.|.SbGr.|.p.1).",
+  "O Aprendiz é limiar: não busca poder, mas enraizamento; deve sustentar o peso do silêncio e o desconforto da espera (.|.SbGr.|.p.2).",
+  "A escuta da margem exige constância: mais do que fazer, o Aprendiz precisa permitir-se ser atravessado (.|.SbGr.|.p.2).",
+  "Um Aprendiz maduro aceita sua posição sem ressentimento ou ansiedade; o silêncio também ensina (.|.SbGr.|.p.2).",
+  "O Neófito recebeu a Luz, mas precisa morrer para certezas: distinguir símbolo de literalidade e limpar o espelho interior (.|.SbGr.|.p.4).",
+  "Neófito é confronto com a imagem ideal: autenticar-se no esvaziamento, não no protagonismo (.|.SbGr.|.p.4).",
+  "O Iniciado começa a dissolver estruturas do ego: a busca vira travessia ética, ontológica e existencial (.|.SbGr.|.p.6).",
+  "Iniciado é o início da travessia real: firmeza silenciosa, ética prática e capacidade de auto-observação (.|.SbGr.|.p.6).",
+  "Mesmo o Iniciado pode cair na armadilha da estagnação confortável; a percepção constante das próprias oscilações é sinal de processo (.|.SbGr.|.p.6).",
+  "O Adepto trabalha a lapidação contínua de si: não busca ser visto, busca ser atravessado; sua força nasce da depuração (.|.SbGr.|.p.8).",
+  "Para o Adepto, profundidade, integridade e zelo pelo campo coletivo se tornam requisitos essenciais (.|.SbGr.|.p.8).",
+  "O Discípulo é o centro da segunda revolução: aprende a acompanhar crises alheias sem se perder nelas (.|.SbGr.|.p.10).",
+  "Discípulo sustenta tarefas reais; sua palavra, quando usada, deve ser cirúrgica; seu serviço nasce da disciplina, não do brilho (.|.SbGr.|.p.10).",
+  "Discípulo maduro sustenta silêncio sem covardia e presença sem protagonismo (.|.SbGr.|.p.11).",
+  "Contramestre é grau de transição: aprende a conduzir sem centralizar, a sustentar sem controlar (.|.SbGr.|.p.12).",
+  "No Contramestre, a presença é estrutural: suas ações afetam o coletivo, e sua compostura é medida (.|.SbGr.|.p.12).",
+  "A Maestria não é coroação mas abertura de um novo abismo: entrar no círculo não é ter poder, é entrega ao poder (.|.SbGr.|.p.14).",
+  "A ilusão do 'agora eu sei' é a armadilha da maestria; o novo Mestre corre risco de tensionar o próprio Círculo (.|.SbGr.|.p.14).",
+  "Entrar na oitava superior exige dissolução: a pergunta deixa de ser 'quem sou eu?' e passa a ser 'sou capaz de desaparecer para que o rito aconteça?' (.|.SbGr.|.p.14).",
+  "Aletheia é desvelamento: não posse de verdade, mas disposição radical de viver à luz do que é, mesmo quando contradiz desejos pessoais (.|.SbGr.|.p.16).",
+  "Aletheia sustenta o campo pela coerência da presença, não pela palavra; já não finge— simplesmente acontece (.|.SbGr.|.p.16).",
+  "Aletheia deve evitar a rigidez da lucidez: ver sem perder compaixão e sem se tornar autossuficiente (.|.SbGr.|.p.17).",
+  "Maat é guardiã da retidão silenciosa: pesa e mede sem tomar partido; regula proporção e eixo vibracional do corpo iniciático (.|.SbGr.|.p.18).",
+  "Maat aplica cortes com bisturi, não com espada: discernimento e precisão são virtudes do equilíbrio (.|.SbGr.|.p.18).",
+  "O risco de Maat é tornar-se juiz em vez de régua; equanimidade sem vibração sequiosa torna-se estagnação (.|.SbGr.|.p.19).",
+  "Azoth é a síntese viva: a culminância da transmutação onde o iniciado se tornou obra, orientando por ser e não por método (.|.SbGr.|.p.20).",
+  "Azoth mantém o Fogo Central da Ordem: disponibilidade radical ao invisível e renúncia consciente à centralidade (.|.SbGr.|.p.20).",
+  "O Azoth verdadeiro desapareceu sem sumir: fala pouco, mas quando fala, o essencial emerge; sua ação é oração (.|.SbGr.|.p.21).",
+  "Até Azoth corre risco de dissolução sem forma: desapego que perde vibração e responsabilidade concreta (.|.SbGr.|.p.21).",
+  "A travessia dos graus é menos sobre receber título e mais sobre o que resiste em nós; a pergunta central é 'o que em mim ainda resiste?' (.|.SbGr.|.p.23).",
+  "O texto é marca de quem passou; o caminho exige encarnação: não se pergunte 'em que grau estou', pergunte 'o que em mim ainda resiste?' (.|.SbGr.|.p.23).",
+  "O rito revela o que ainda não morreu em nós; a maestria exige prostração ao princípio, não à figura (.|.SbGr.|.p.14).",
+  "Quem não estiver disposto a se dissolver mesmo depois do que já foi deposto, ainda não está pronto (.|.SbGr.|.p.15).",
+  "A função não é ser atendida pela estrutura — é sustentá-la; isso é exigido no Adepto e no Contramestre (.|.SbGr.|.p.8,.p.12).",
+  "A presença estruturante do Azoth reorganiza: quando ele fala, o essencial emerge; quando cala, o silêncio é pedagógico (.|.SbGr.|.p.20–21).",
+  "A travessia é cíclica, não repetitiva: sobe oitavas da mesma melodia, exigindo vigilância mais precisa a cada volta (.|.SbGr.|.p.1).",
+  "Sustentar ritos e respeitar tempos internos é a medida real do avanço, não decoração de linguagem iniciática (.|.SbGr.|.p.1,.p.23).",
+  "Toda etapa exige humildade vigilante: não submissão, mas ausência de pressa em afirmar-se (.|.SbGr.|.p.2).",
+  "A maestria é obra diária: não comando, mas renúncia; não protagonismo, mas serviço ao todo (.|.SbGr.|.p.14,.p.20).",
+  "Encarnar o próximo grau é gesto, silêncio e entrega real — não busca por novo posto, mas presença mais íntegra (.|.SbGr.|.p.23).",
+    "A frustração não é acidente de percurso: é ferramenta iniciática que revela expectativas ocultas e promove transformação (.|.SbPd.|.p.1).",
+  "O papel do mestre não é garantir conforto emocional, mas criar contextos simbólicos para que o iniciado se veja com verdade (.|.SbPd.|.p.1).",
+  "Maturidade iniciática não se mede pela ausência de dor, mas pela capacidade de atravessá-la com lucidez (.|.SbPd.|.p.1).",
+  "Muitos iniciados confundem sensibilidade com espiritualidade e acolhimento com confirmação (.|.SbPd.|.p.1).",
+  "A sensibilidade é preciosa — desde que seja sensibilidade da alma, e não carência do ego (.|.SbPd.|.p.3).",
+  "O ego ainda iludido de que controla o crescimento fere-se quando o rito não confirma sua fantasia (.|.SbPd.|.p.3).",
+  "O verdadeiro mestre responde à necessidade, não ao desejo; muitas vezes a necessidade pede frustração (.|.SbPd.|.p.4).",
+  "Perguntas que funcionam como espelhos: 'Isso é dor da alma ou vaidade ferida? Você quer crescer ou ser acolhido como criança eterna?' (.|.SbPd.|.p.4).",
+  "Nem toda dor precisa ser protegida; algumas precisam ser escutadas com firmeza e atravessadas com lucidez (.|.SbPd.|.p.5).",
+  "Silêncio do mestre pode ser ensinamento mais potente do que mil palavras — não é negligência, é pedagogia (.|.SbPd.|.p.6).",
+  "O ego ferido quer colo; a alma ferida quer verdade — o Mestre comprometido com a alma sabe dizer 'não' quando necessário (.|.SbPd.|.p.6).",
+  "O acolhimento incondicional é projeção infantilizada que impede a travessia; acolher não é confirmar (.|.SbPd.|.p.7).",
+  "A pedagogia iniciática é anticíclica à lógica afetiva contemporânea: exige verticalidade simbólica mais que empatia ininterrupta (.|.SbPd.|.p.8).",
+  "A idealização do mestre como figura eternamente acolhedora é tentativa de controle que mantém o ego no centro (.|.SbPd.|.p.7).",
+  "Entregar-se ao caminho é abrir mão da necessidade de controlar a experiência; é sustentar a presença mesmo quando a narrativa interna desmorona (.|.SbPd.|.p.10).",
+  "Só quando a imagem cai — e o discípulo permanece — a iniciação de fato começa (.|.SbPd.|.p.10).",
+  "Frustração revela o intervalo entre aquilo que se esperava e aquilo que é: mostra onde há apego e projeção (.|.SbPd.|.p.11).",
+  "Na paideía, educar significava romper hábitos e impulsos; esse rompimento é doloroso e necessário (.|.SbPd.|.p.11).",
+  "A frustração impede acomodação na forma anterior; é a pressão que revela o que precisa ser deposto (.|.SbPd.|.p.11).",
+  "Quando a frustração surge, a pergunta vital é: 'o que exatamente foi frustrado?' — ela revela a expectativa não vista (.|.SbPd.|.p.11).",
+  "Um caminho que não frustra nada oferece conforto, não travessia — conforto prolongado é antídoto contra transformação (.|.SbPd.|.p.12).",
+  "Estrutura que convoca elaboração transforma mágoa em campo dialético, espelho coletivo e fermento de crescimento (.|.SbPd.|.p.12).",
+  "A verdadeira escuta da frustração não busca culpados, mas clareza e metabolização transformadora (.|.SbPd.|.p.13).",
+  "Há um momento silencioso em que o iniciado passa de reagir como lesado a perguntar 'o que em mim foi frustrado?'; daí começa o processo (.|.SbPd.|.p.13).",
+  "Um mestre que dobra-se a todo gesto de mágoa falha com o discípulo: o cuidado verdadeiro não reforça a ilusão (.|.SbPd.|.p.6).",
+  "Sustentar presença não é omissão: é cuidado que não endossa a ilusão, mas sustenta o processo até a autorrevelação (.|.SbPd.|.p.6).",
+  "A pedagogia iniciática esculpe presenças mais que seguir manuais; não protege do impacto, mas cria condições para que ele seja passagem (.|.SbPd.|.p.14).",
+  "A frustração é pressão seletiva: revela desejos ocultos que tentam se infiltrar no processo como entrega (.|.SbPd.|.p.11).",
+  "A escuta compassiva existe — e o silêncio absoluto pode ser abuso —, porém escutar não implica em subserviência ao ego (.|.SbPd.|.p.5).",
+  "O mestre deve discernir quando sustentar presença e quando manter silêncio e firmeza; ser abrigo sem virar refém da expectativa (.|.SbPd.|.p.6).",
+  "A entrega verdadeira não exclui a crítica: o discípulo entregue pode discordar sem abandonar o processo (.|.SbPd.|.p.10).",
+  "Idealizar é resistência: enquanto se idealiza, mantém-se fantasia de controle e permanece-se no centro da cena (.|.SbPd.|.p.10).",
+  "Quando a imagem cai e o discípulo permanece, a iniciação começa; permanecer é sinal de entrega real (.|.SbPd.|.p.10).",
+  "A frustração bem trabalhada transforma mágoa em recurso de revelação — não em ameaça que paralisa (.|.SbPd.|.p.12).",
+  "A estrutura não existe para evitar atrito, mas para metabolizá-lo em transformação; a elaboração coletiva é essencial (.|.SbPd.|.p.12).",
+  "O rito não se curva à sensibilidade momentânea; exige a síntese entre compaixão e firmeza (.|.SbPd.|.p.8).",
+  "O verdadeiro mestre não evita dores, mas não mente diante delas: responsabilidade é não iludir (.|.SbPd.|.p.6).",
+  "A pedagogia iniciática não visa aprovação do iniciado, mas revelar seu eixo: escolher verdade em vez de confirmação (.|.SbPd.|.p.14).",
+  "Frustração permanente sem elaboração vira trauma; frustração com elaboração vira passagem (.|.SbPd.|.p.12).",
+  "O mestre trabalha para sustentar a frustração no tempo certo e no grau justo — nem paralisante, nem descartável (.|.SbPd.|.p.12).",
+  "A escuta simbólica refinada exige percepções das resistências e discernimento sobre o que está em jogo (.|.SbPd.|.p.14).",
+  "A idealização do acolhimento total transforma o rito em terapia e o templo em consultório emocional (.|.SbPd.|.p.8).",
+  "Saber dizer 'não' no momento certo é um gesto de verdadeiro cuidado iniciático (.|.SbPd.|.p.6).",
+  "A alma suporta o não; o ego exige que tudo seja sim — reconhecer essa diferença é aprendizagem (.|.SbPd.|.p.3).",
+  "Um mestre autêntico sustenta o outro até que ele mesmo possa se ver com honestidade — mesmo que isso gere afastamento temporário (.|.SbPd.|.p.6).",
+  "A travessia se renova cada vez que o sujeito escolhe a verdade em vez da confirmação; isso é iniciação viva (.|.SbPd.|.p.14).",
+  "A verdadeira entrega é transformar a própria ferida em espelho e oferenda para diálogo honesto, não em arma de exigência (.|.SbPd.|.p.10).",
+  "A pedagogia iniciática é amor comprometido com a verdade que liberta — não afeto sensível, mas responsabilidade (.|.SbPd.|.p.15)."
 ];
 
 
@@ -113,7 +205,7 @@ client.on('messageCreate', async (message) => {
   const userId = message.author.id;
   const key = sessionKey(channelId, userId);
 
-  // Comandos
+  // 1 Comandos
   if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
     const command = args.shift()?.toLowerCase();
@@ -159,8 +251,19 @@ client.on('messageCreate', async (message) => {
     
     return;
   }
+  
 
-  // Respostas de quem está em sessão
+  // 2) SE NÃO ESTÁ EM ENTREVISTA, PODE RESPONDER MENÇÃO
+  const session = sessions.get(key); // verifica sessão aqui
+
+  if (!session && message.mentions.has(client.user)) {
+    const random = FRASES[Math.floor(Math.random() * FRASES.length)];
+    await message.reply(random);
+    return; // não tem entrevista, então pode encerrar aqui
+  }
+
+  // 3) SE ESTÁ EM ENTREVISTA, TRATA A RESPOSTA NORMALMENTE
+  if (!session) return; // não tem sessão nem menção -> ignora
   const session = sessions.get(key);
   if (!session) return;
 
