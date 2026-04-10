@@ -333,30 +333,46 @@ client.on('messageCreate', async (message) => {
 
   const channelId = message.channel.id;
   const userId = message.author.id;
-  const key = sessionKey(channelId, userId);
+  //const key = sessionKey(channelId, userId);
 
   // 1 Comandos
-  if (message.content.startsWith(PREFIX)) {
+    if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
     const command = args.shift()?.toLowerCase();
 
-    // Entrevista de Entrada de incautos
     if (command === 'entrevistaentrada') {
+      // alvo da entrevista: @fulano se houver menção, senão quem chamou
+      const targetMember =
+        message.mentions.members.first() ||
+        (args[0]
+          ? await message.guild.members.fetch(args[0]).catch(() => null)
+          : message.member);
+
+      if (!targetMember) {
+        await message.reply('Indique quem será entrevistado. Exemplo: `!entrevistaentrada @fulano` ou `!entrevistaentrada ID`.');
+        return;
+      }
+
+      const target = targetMember.user;
+      const key = sessionKey(channelId, target.id);
+
       if (sessions.has(key)) {
         await message.reply(
-          'Você já tem uma entrevista em andamento neste canal. ' +
-          'Responda às perguntas ou digite "CANCELAR" para encerrar.'
+          `Já existe uma entrevista em andamento neste canal para ${target}. ` +
+          'Peça para a pessoa responder às perguntas ou digitar "CANCELAR" para encerrar.'
         );
         return;
       }
 
       sessions.set(key, {
         index: 0,
-        answers: []
+        answers: [],
+        entrevistadoId: target.id,
+        iniciadoPorId: message.author.id
       });
 
       const intro =
-        'Saudações a quem se aproxima, ' + message.author.toString() + '\n\n' +
+        'Saudações a quem se aproxima, ' + target.toString() + '\n\n' +
         'Iniciaremos agora a **Entrevista de Entrada**.\n\n' +
         'Este é um espaço para que você se **apresente com clareza e sinceridade**, ' +
         'falando sobre a sua história, seus vínculos, sua forma de se relacionar e de responder ao chamado.\n\n' +
@@ -371,48 +387,20 @@ client.on('messageCreate', async (message) => {
       await message.channel.send(intro);
       return;
     }
-
-    // comando !frase
-    if (command === 'frase') {
-      const random = FRASES[Math.floor(Math.random() * FRASES.length)];
-      await message.channel.send(random);
-      return;
-    }
-    
-    // Comando !prontuario @alguem
-    if (command === 'prontuario') {
-      const target =
-        message.mentions.users.first() ||
-        (args[0] ? await message.client.users.fetch(args[0]).catch(() => null) : null);
-  
-      if (!target) {
-        await message.reply('Indique alguém. Exemplo: `!prontuario @usuario` ou `!prontuario ID`.');
-        return;
-      }
-  
-      const thread = await getOrCreateProntuarioThread(message.guild, target);
-      if (!thread) {
-        await message.reply('Não consegui acessar o canal de prontuário. Verifique o ID e as permissões do bot.');
-        return;
-      }
-  
-      await message.reply(`Prontuário de ${target}: ${thread.url}`);
-      return;
-    }
-    return;
-  }
   
 
-  // 2) SE NÃO ESTÁ EM ENTREVISTA, PODE RESPONDER MENÇÃO
-  const session = sessions.get(key); // verifica sessão aqui
+  // 2) SESSÃO: agora o entrevistado é quem responde
+  const key = sessionKey(channelId, userId); // chave = canal + quem está falando
+  const session = sessions.get(key);
 
+  // Se NÃO está em entrevista, mas mencionou o bot → responde FRASE
   if (!session && message.mentions.has(client.user)) {
     const random = FRASES[Math.floor(Math.random() * FRASES.length)];
     await message.reply(random);
-    return; // não tem entrevista, então pode encerrar aqui
+    return;
   }
 
-  // 3) SE ESTÁ EM ENTREVISTA, TRATA A RESPOSTA NORMALMENTE
+  // Se não tem sessão e não é menção → ignora
   if (!session) return;
 
   const content = message.content.trim();
