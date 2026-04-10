@@ -21,7 +21,28 @@ const client = new Client({
 });
 
 const PREFIX = '!';
-
+const SAUDACOES_SYN = [
+  "Eu sou Syn. Nos salões de Frigg, eu era quem dizia “não”. Aqui, faço o mesmo: não ao teatro, não ao curioso vazio, não ao atalho profano. Se você chegou até mim, é porque talvez haja um “sim” escondido em você. Vamos descobrir.",
+  "Entre tantos nomes que ecoam na Ordem, o meu é simples: Syn. Em Asgard eu guardava portas. Aqui, guardo limiares internos. Não tema o meu “não”: ele existe para proteger o teu “sim” mais verdadeiro.",
+  "Sou aquela que barra o indesejado, não por capricho, mas por cuidado com o Fogo. Minha função é antiga: separar o que entra do que fica do lado de fora. Hoje, eu te escuto para saber de qual lado você realmente quer estar.",
+  "Não confundam: eu não sou porteira de boate esotérica. Sou Syn, guardiã de portas sagradas. Minha pergunta não é se você quer entrar — é se está pronto para o que encontra ao cruzar.",
+  "Nas velhas histórias, eu estava ao lado de Frigg, recusando juramentos falsos e causas injustas. Aqui, recuso apenas uma coisa: o caminho pela metade. Se você veio pela metade, aproveite a entrevista para se completar.",
+  "Eu não grito, não brando martelos, não lanço raios. Minha arma é um simples “não” colocado no lugar certo. A entrevista de entrada é o nosso primeiro pacto: você traz verdade, eu abro passagem — ou não.",
+  "Muitos deuses gostam de prometer. Eu sou a que impede promessas vazias. Meu ofício é vetar o que não é íntegro. Responda com a alma inteira, e talvez eu silencie o meu “não” por um tempo.",
+  "No Norte antigo, eu fechava portas de salões dourados. Aqui, fecho portas de atalho. Não estou aqui para te agradar, estou aqui para proteger o Círculo — e, por tabela, proteger você de um caminho que não é seu.",
+  "Se você me sente severa, lembre-se: é a severidade que impede o profano de profanar tudo. Eu não sou a dona da Ordem, apenas a defensora de seus limiares. Hoje, defendo este momento entre você e o Fogo.",
+  "Chame-me de Syn, se quiser. Alguns me chamariam de “advogada dos portais”: advogo sempre a favor da verdade. Se suas palavras e sua vida combinarem, eu mesma abrirei a porta com um gesto quase imperceptível.",
+  "Fui feita para dizer “não” a deuses e homens quando o pedido era torto. Não espere de mim tapete vermelho. Espere perguntas que te obriguem a olhar de frente para quem você é, antes de pedir para andar mais fundo.",
+  "Eu, Syn, sei reconhecer a diferença entre quem bate à porta com reverência e quem chuta tentando forçar entrada. A entrevista de entrada é sua chance de mostrar que veio bater — não invadir.",
+  "Do alto dos salões de Asgard aos canais de um servidor moderno, minha função é a mesma: filtrar. Se as tuas intenções forem névoa, eu as recuso. Se forem chama, eu as encaminho.",
+  "Não se engane: o “não” que eu represento não é castigo, é proteção. Às vezes, proteger a Ordem significa te proteger de entrar antes da hora. Minhas perguntas cuidam disso.",
+  "Sou a deusa que diz “basta” quando o sagrado é tratado como brinquedo. Se você veio jogar com símbolos, talvez pare aqui. Se veio caminhar com eles, talvez eu mesma empurre a porta discretamente.",
+  "Sou Syn: deusa da recusa justa, não da rejeição cega. Não recuso pessoas, recuso posturas. E postura é exatamente o que suas respostas vão revelar.",
+  "Em linguagem moderna, eu seria o firewall da Ordem. Em linguagem antiga, sou apenas Syn, a que guarda o portal. Você traz seu pacote de histórias, eu vejo o que passa e o que fica retido para análise.",
+  "Alguns pedem bênçãos, outros pedem provas. Eu não dou nenhum nem outro: eu peço coerência. Que suas palavras não sejam mais bonitas do que os teus passos, ou meu “não” será silencioso, mas firme.",
+  "Eu não prometo iluminações, prometo apenas justiça no limiar. Se você se apresentar com honestidade, meu papel é simples: dar passagem e acionar quem precisa te ver. Se não, minha função é encerrar o rito aqui mesmo.",
+  "Sou Syn, filha do Norte, mão de Frigg, guardiã de portas. Entre, sente-se, responda. O que você disser hoje ecoará por muito mais tempo do que esta entrevista. Eu apenas certifico que o eco não seja vazio."
+];
 const QUESTIONS = [
   'Como você agiria em uma situação onde alguém lhe pressiona constantemente querendo informações?',
   'Como você encara pessoas com ideias radicalmente opostas a sua?',
@@ -472,6 +493,16 @@ client.on('messageCreate', async (message) => {
 
     return;
   }
+
+  if (!sessions.get(sessionKey(channelId, userId))
+      && message.mentions.has(client.user)
+      && /(oi|olá|ola|e aí|eaí|apresente-se|apresenta-te|quem é você)/i.test(message.content)) {
+
+    const random = SAUDACOES_SYN[Math.floor(Math.random() * SAUDACOES_SYN.length)];
+    await message.reply(random);
+    return;
+  }
+
 
   // 2) SESSÃO: entrevistado é quem responde
   const key = sessionKey(channelId, userId);
