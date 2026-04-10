@@ -198,6 +198,53 @@ client.once('ready', () => {
   console.log(`Bot logado como ${client.user.tag}`);
 });
 
+// Busca threads/tópicos de prontuário por aproximação de nome
+async function buscarProntuariosPorNome(guild, query) {
+  if (!PRONTUARIO_CHANNEL_ID) return [];
+  const prontuarioChannel = guild.channels.cache.get(PRONTUARIO_CHANNEL_ID);
+  if (!prontuarioChannel) return [];
+
+  query = query.toLowerCase().trim();
+  if (!query) return [];
+
+  // Garante que temos as threads carregadas (ativas + arquivadas)
+  await prontuarioChannel.threads?.fetchActive?.().catch(() => null);
+  await prontuarioChannel.threads?.fetchArchived?.().catch(() => null);
+
+  const threads = prontuarioChannel.threads?.cache;
+  if (!threads || threads.size === 0) return [];
+
+  // Função simples de "similaridade"
+  function scoreName(name) {
+    const n = name.toLowerCase();
+    if (n === query) return 100;
+    if (n.startsWith(query)) return 80;
+    if (n.includes(query)) return 60;
+
+    // Pontuação por caracteres em comum
+    let common = 0;
+    for (const ch of query) {
+      if (n.includes(ch)) common++;
+    }
+    return common;
+  }
+
+  // Monta lista com pontuações
+  const scored = [];
+  for (const thread of threads.values()) {
+    if (!thread.name) continue;
+    const s = scoreName(thread.name);
+    if (s > 0) {
+      scored.push({ thread, score: s });
+    }
+  }
+
+  // Ordena por score desc e pega top 3
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, 3).map(x => x.thread);
+}
+
+
 // Envia relatório para o canal de prontuário (fórum ou texto+thread)
 async function enviarParaProntuario(message, reportText) {
   const guild = message.guild;
@@ -376,24 +423,32 @@ client.on('messageCreate', async (message) => {
     }
 
     if (command === 'prontuario') {
-      const targetUser =
-        message.mentions.users.first() ||
-        (args[0] ? await message.client.users.fetch(args[0]).catch(() => null) : null);
+      const rawQuery = args.join(' ').trim();
 
-      if (!targetUser) {
-        await message.reply('Indique alguém. Exemplo: `!prontuario @usuario` ou `!prontuario ID`.');
+      if (!rawQuery) {
+        await message.reply(
+          'Use assim: `!prontuario Nome`.\n' +
+          'Por exemplo: `!prontuario .|.Neo.|.Fulano.|.` ou parte do nome.'
+        );
         return;
       }
 
-      const thread = await getOrCreateProntuarioThread(message.guild, targetUser);
-      if (!thread) {
-        await message.reply('Não consegui acessar o canal de prontuário. Verifique o ID e as permissões do bot.');
+      const threads = await buscarProntuariosPorNome(message.guild, rawQuery);
+
+      if (threads.length === 0) {
+        await message.reply(`Nenhum prontuário encontrado contendo: \`${rawQuery}\`.`);
         return;
       }
 
-      await message.reply(`Prontuário de ${targetUser}: ${thread.url}`);
+      let resposta = `Encontrei ${threads.length} possível(is) prontuário(s) para \`${rawQuery}\`:\n\n`;
+      threads.forEach((t, idx) => {
+        resposta += `${idx + 1}) **${t.name}**\n${t.url}\n\n`;
+      });
+
+      await message.reply(resposta);
       return;
     }
+
 
     return;
   }
