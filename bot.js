@@ -35,6 +35,64 @@ const QUESTIONS = [
   'Relato sobre o tema: Neste momento, exponha seus pensamentos sobre o tema que lhe foi apresentado.',
   'Use este espaço para observações ou dúvidas que ache pertinente.'
 ];
+const FRASES = [
+  "A forma sem ética é disfarce: ela vira teatro vazio ou armadura para esconder erro (.|.CdEt.|.p.4).",
+  "Sem ética elevada, o rito se torna risco; a intensidade só é legítima se sustentada por compromisso ético (.|.CdEt.|.p.4).",
+  "A ética é o que mantém o Fogo sagrado: não apenas o que se faz diante dos outros, mas o que se sustenta no silêncio da consciência (.|.CdEt.|.p.5).",
+  "É a ética — e só ela — que garante que a espada corta para curar, e não para ferir por vaidade (.|.CdEt.|.p.5).",
+  "A diferença essencial: ética profana protege o indivíduo; ética simbólica protege o rito (.|.CdEt.|.p.6).",
+  "Impessoalidade não é frieza: é agir em nome de algo que nos excede, sem misturar as cores da própria biografia (.|.CdEt.|.p.7).",
+  "O erro ético na ética simbólica não é só o que foi feito — é o que viola o campo (.|.CdEt.|.p.7).",
+  "A função iniciática é convocação: quem ocupa função desce ao centro do fogo; assume peso como serviço, não como privilégio (.|.CdEt.|.p.10).",
+  "A função é um lugar de escuta e doação — não de controle e visibilidade (.|.CdEt.|.p.10).",
+  "A função pede impessoalidade sem desumanidade; pede vigilância constante sobre si mesmo (.|.CdEt.|.p.11).",
+  "A função é uma tocha — não uma coroa: ilumina, mas queima; só pode ser sustentada por quem aceita ser canal e não centro (.|.CdEt.|.p.13).",
+  "Aqui, a escuta é horizontal — mas a função é vertical: todos podem falar, mas nem todos devem decidir (.|.CdEt.|.p.15).",
+  "Função sem escuta vira tirania; escuta sem função vira ruído e caos (.|.CdEt.|.p.15).",
+  "Entre hierarquia e horizontalidade, a via madura é: escutar amplamente e concentrar decisão ritualmente (.|.CdEt.|.p.16).",
+  "A ética da presença: sustentar sem colonizar — renunciar à centralidade pessoal em favor do Fogo (.|.CdEt.|.p.17).",
+  "Colonizar o campo é usá-lo como extensão do próprio desejo; o mestre é canal — não vértice (.|.CdEt.|.p.18).",
+  "Não usar o rito para elaborar dores pessoais; o espaço iniciático não é consultório (.|.CdEt.|.p.19).",
+  "Estar disponível sem ser absorvido: presença com borda, discernimento e limites claros (.|.CdEt.|.p.20).",
+  "O mestre é sustentador do rito, não cuidador da subjetividade individual do outro (.|.CdEt.|.p.22).",
+  "A sobreposição entre mestre e terapeuta desloca a escuta para a subjetividade e contamina o rito (.|.CdEt.|.p.25).",
+  "Quando o mestre tenta curar, desvia o fogo; quando o discípulo exige cura, paralisa a travessia (.|.CdEt.|.p.26).",
+  "A tentação de resolver o outro é arrogância do cuidado: o rito existe para expor, não para proteger a pessoa do risco necessário (.|.CdEt.|.p.28).",
+  "Quem resolve demais impede que o outro descubra seus próprios contornos — onde não há vazio, não há rito (.|.CdEt.|.p.29).",
+  "Fazer silêncio diante da dor alheia, quando tudo em nós quer intervir, é coragem de confiar no rito mais do que em si mesmo (.|.CdEt.|.p.30).",
+  "Saber quando calar e quando interromper é arte do mestre: calar como pedagogia; interromper como contenção ritual (.|.CdEt.|.p.31).",
+  "Nomear a escolha de calar protege a travessia de mal-entendidos e preserva o campo (.|.CdEt.|.p.32).",
+  "O maior risco do mestre é acreditar que já é mestre; proteger-se disso exige dúvida, silêncio e coragem de ser corrigido (.|.CdEt.|.p.34).",
+  "Nenhum mestre é autossuficiente; a ordem precisa de estruturas de escuta e revisão (.|.CdEt.|.p.35).",
+  "A ética da vulnerabilidade para iniciados: disciplina entre cuidado materno e firmeza ritual, para ritualizar impacto com responsabilidade (.|.CdEt.|.p.36–38).",
+  "Elogio fora de hora pode cristalizar identidade imaginária; devolução simbólica educa sem ferir (.|.CdEt.|.p.37–38).",
+  "A ética do conflito para discípulos: sustentar tensão sem ceder à corrosão estrutural; quem fala, sustenta (.|.CdEt.|.p.40–42).",
+  "O discípulo que busca reconhecimento deve aprender que manifestar implica responsabilidade simbólica (.|.CdEt.|.p.41–42).",
+  "A ética da exposição para mestres: a função não é identidade; cada gesto deve perguntar 'isso serve ao rito ou à minha imagem?' (.|.CdEt.|.p.44–46).",
+  "A vaidade espiritual se disfarça de zelo; o mestre precisa autovigilância simbólica constante (.|.CdEt.|.p.45).",
+  "Sustentar o espelho: confrontar o discípulo como gesto de amor ético — refletir para transformar, não para humilhar (.|.CdEt.|.p.47–48).",
+  "A dor que vira centro do campo exige reconfiguração: não excluir, mas preservar rito e sujeito com contornos claros (.|.CdEt.|.p.50).",
+  "Afastamento pedagógico é cuidado: indicar caminhos, terapia e pausas rituais — é gesto de proteção, não abandono (.|.CdEt.|.p.51).",
+  "Indicação responsável de acompanhamento clínico é ato de maturidade institucional e ética (.|.CdEt.|.p.55).",
+  "Círculos de escuta entre pares elaboram crises sem verticalidade e reduzem sobrecarga dos condutores (.|.CdEt.|.p.55).",
+  "Formação para mestres em sinais de alerta (persecução, dissociação, manipulação afetiva) é obrigação ética (.|.CdEt.|.p.56).",
+  "Nomeação pública ritualizada de limites cria segurança simbólica e evita expulsões opacas (.|.CdEt.|.p.57).",
+  "Condutas inadequadas: captura afetiva prende o discípulo; contenção amorosa devolve autonomia (.|.CdEt.|.p.59).",
+  "Discurso espiritual usado para silenciar é traição ao rito: linguagem sagrada não pode ser arma de dominação (.|.CdEt.|.p.60).",
+  "Abusos travestidos de provações são reviver da própria travessia não elaborada; provação legítima é proporcional e com escuta (.|.CdEt.|.p.61).",
+  "Exercício da condução em benefício próprio transforma função em cetro; a função só é legítima enquanto permanecer em escuta (.|.CdEt.|.p.62).",
+  "Diante de desvios de um outro mestre: procurar pares, escutar com cuidado e levar ao eixo antes do círculo — lealdade é ao Fogo (.|.CdEt.|.p.66).",
+  "Sustentar denúncias sem ferir o rito exige proteção ao denunciante, processo de apuração e evitar sensacionalismo emocional (.|.CdEt.|.p.67).",
+  "O retiro interno do mestre é eixo invisível da função: sem ele, a condução vira performance e a autoridade, dogma (.|.CdEt.|.p.69–71).",
+  "A máscara ética do ego: a linguagem da ética dissociada da escuta real torna a ética maquiagem da imagem (.|.CdEt.|.p.72–73).",
+  "A dor não escutada do mestre contamina a condução; reconhecer e recolher-se é obrigação ética (.|.CdEt.|.p.72–74).",
+  "Campo profanado por silêncio coletivo exige nomeação, escuta da verdade, do dano e do real para reparação (.|.CdEt.|.p.76–77).",
+  "Honestidade profunda é oração invisível: dizer 'não sei' e retornar com correção realinha o campo (.|.CdEt.|.p.78–80).",
+  "Silêncio como prática ética: presença vigilante que protege o tempo do rito; a palavra deve nascer do silêncio verdadeiro (.|.CdEt.|.p.82–84).",
+  "A ética não é código fechado, é caminho — perguntas contínuas como 'de onde estou falando?' sustentam a integridade (.|.CdEt.|.p.85–87)."
+];
+
+
 
 // chave: `${channelId}:${userId}` -> { index, answers }
 const sessions = new Map();
@@ -60,6 +118,7 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
     const command = args.shift()?.toLowerCase();
 
+    // Entrevista de Entrada de incautos
     if (command === 'entrevistaentrada') {
       if (sessions.has(key)) {
         await message.reply(
@@ -91,6 +150,13 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
+    // comando !frase
+    if (command === 'frase') {
+      const random = FRASES[Math.floor(Math.random() * FRASES.length)];
+      await message.channel.send(random);
+      return;
+    }
+    
     return;
   }
 
