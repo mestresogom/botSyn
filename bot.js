@@ -387,7 +387,7 @@ client.on('messageCreate', async (message) => {
       await message.channel.send(intro);
       return;
     }
-  
+  }
 
   // 2) SESSÃO: agora o entrevistado é quem responde
   const key = sessionKey(channelId, userId); // chave = canal + quem está falando
