@@ -11,6 +11,8 @@ if (!TOKEN) {
 const MESTRES_ROLE_ID = '546834826989273088';
 // ID do canal de prontuário (Fórum ou texto)
 const PRONTUARIO_CHANNEL_ID = '1492159823872135248';
+// TROQUE PELO ID REAL DA ROLE QUE REPRESENTA @Syn (se existir)
+const SYN_ROLE_ID = '1491891413128974561';
 
 const client = new Client({
   intents: [
@@ -540,32 +542,49 @@ client.on('messageCreate', async (message) => {
     return;
   }
 
-  // 1.5) SAUDAÇÃO QUANDO CHAMAM A SYN
-  const naoEstaEmEntrevista = !sessions.get(sessionKey(channelId, userId));
+  // 1.5) SESSÃO E MENÇÕES À SYN
+  const key = sessionKey(channelId, userId);
+  const session = sessions.get(key);
+
+  const naoEstaEmEntrevista = !session;
   const mencionouSynComoUsuario = message.mentions.has(client.user);
-  // se mencionar a role dos mestres, não dispara saudação
+  const mencionouSynRole = SYN_ROLE_ID
+    ? message.mentions.roles.has(SYN_ROLE_ID)
+    : false;
   const mencionouRoleMestres = MESTRES_ROLE_ID
     ? message.mentions.roles.has(MESTRES_ROLE_ID)
     : false;
-  
-  // só considera saudação se mencionou o bot e NÃO mencionou a role
+
+  // saudação específica (apresentação da Syn)
+  const pediuSaudacao =
+    /(oi|olá|ola|e aí|eaí|apresente-se|apresenta-te|quem é você)/i.test(message.content);
+
+  // 1.5a) Apresentação da Syn
   if (
     naoEstaEmEntrevista &&
-    mencionouSynComoUsuario &&
     !mencionouRoleMestres &&
-    /(oi|olá|ola|e aí|eaí|apresente-se|apresenta-te|quem é você)/i.test(message.content)
+    (mencionouSynComoUsuario || mencionouSynRole) &&
+    pediuSaudacao
   ) {
-    const random = SAUDACOES_SYN[Math.floor(Math.random() * SAUDACOES_SYN.length)];
-    await message.reply(random);
+    const randomSaud = SAUDACOES_SYN[Math.floor(Math.random() * SAUDACOES_SYN.length)];
+    await message.reply(randomSaud);
+    return;
+  }
+
+  // 1.5b) Outras menções à Syn fora de entrevista → FRASES éticas
+  if (
+    naoEstaEmEntrevista &&
+    !mencionouRoleMestres &&
+    (mencionouSynComoUsuario || mencionouSynRole)
+  ) {
+    const randomFrase = FRASES[Math.floor(Math.random() * FRASES.length)];
+    await message.reply(randomFrase);
     return;
   }
 
   // 2) SESSÃO: entrevistado é quem responde
-  const key = sessionKey(channelId, userId);
-  const session = sessions.get(key);
-
-  // Se não tem sessão e não é menção -> ignora
   if (!session) return;
+
 
   const content = message.content.trim();
 
