@@ -443,6 +443,52 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
+    
+   if (command === 'synfalar') {
+      // só mestres podem usar
+      const member = message.member;
+      if (!member || !member.roles.cache.has(MESTRES_ROLE_ID)) {
+        await message.reply('Apenas .|.M.|. podem falar pela Syn.');
+        return;
+      }
+
+      if (args.length === 0) {
+        await message.reply(
+          'Use assim:\n' +
+          '- `!synfalar mensagem`\n' +
+          '- ou `!synfalar #canal mensagem`'
+        );
+        return;
+      }
+
+      let targetChannel = message.channel;
+      let textArgs = args;
+
+      // se o primeiro argumento é uma menção a canal, usar esse canal
+      const canalMencionado = message.mentions.channels.first();
+      if (canalMencionado) {
+        targetChannel = canalMencionado;
+        // remove o id/menção do canal dos argumentos
+        textArgs = args.slice(1);
+      }
+
+      const texto = textArgs.join(' ').trim();
+      if (!texto) {
+        await message.reply('Você precisa informar o texto que a Syn deve dizer.');
+        return;
+      }
+
+      // Syn “fala”
+      await targetChannel.send(texto);
+
+      // Confirma pra quem chamou (em DM ou no próprio canal)
+      if (targetChannel.id !== message.channel.id) {
+        await message.reply(`Mensagem enviada pela Syn em ${targetChannel}.`);
+      }
+
+      return;
+    }
+    
   if (command === 'prontuario') {
       // 1) Se tiver menção ou ID, cria/retorna prontuário da pessoa
       const maybeId = args[0];
@@ -494,26 +540,29 @@ client.on('messageCreate', async (message) => {
     return;
   }
 
-  if (!sessions.get(sessionKey(channelId, userId))
-      && message.mentions.has(client.user)
-      && /(oi|olá|ola|e aí|eaí|apresente-se|apresenta-te|quem é você)/i.test(message.content)) {
-
+  // 1.5) SAUDAÇÃO QUANDO CHAMAM A SYN
+  const naoEstaEmEntrevista = !sessions.get(sessionKey(channelId, userId));
+  const mencionouSynComoUsuario = message.mentions.has(client.user);
+  // se mencionar a role dos mestres, não dispara saudação
+  const mencionouRoleMestres = MESTRES_ROLE_ID
+    ? message.mentions.roles.has(MESTRES_ROLE_ID)
+    : false;
+  
+  // só considera saudação se mencionou o bot e NÃO mencionou a role
+  if (
+    naoEstaEmEntrevista &&
+    mencionouSynComoUsuario &&
+    !mencionouRoleMestres &&
+    /(oi|olá|ola|e aí|eaí|apresente-se|apresenta-te|quem é você)/i.test(message.content)
+  ) {
     const random = SAUDACOES_SYN[Math.floor(Math.random() * SAUDACOES_SYN.length)];
     await message.reply(random);
     return;
   }
 
-
   // 2) SESSÃO: entrevistado é quem responde
   const key = sessionKey(channelId, userId);
   const session = sessions.get(key);
-
-  // Se NÃO está em entrevista, mas mencionou o bot → responde FRASE
-  if (!session && message.mentions.has(client.user)) {
-    const random = FRASES[Math.floor(Math.random() * FRASES.length)];
-    await message.reply(random);
-    return;
-  }
 
   // Se não tem sessão e não é menção -> ignora
   if (!session) return;
