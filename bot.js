@@ -57,7 +57,7 @@ const QUESTIONS = [
   'Qual a relação entre você e seus pais? Como você vê sua relação com eles.',
   'Qual seria a sua ação diante da revelação de uma falta grave de um companheiro de ordem?',
   'Que motivos fariam você se atrasar a um compromisso?',
-  'Relato sobre o tema: Neste momento, exponha seus pensamentos sobre o tema que lhe foi apresentado.',
+  'Para visitantes em Reuniões apenas: Relato sobre o tema: Neste momento, exponha seus pensamentos sobre o tema que lhe foi apresentado.',
   'Use este espaço para observações ou dúvidas que ache pertinente.'
 ];
 const FRASES = [
