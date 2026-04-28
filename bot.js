@@ -209,6 +209,26 @@ const FRASES = [
   "A pedagogia iniciática é amor comprometido com a verdade que liberta — não afeto sensível, mas responsabilidade (.|.SbPd.|.p.15)."
 ];
 
+ const textotensoes =
+`Saudações, Profano(a)(e),
+Ouvimos o seu chamado e este foi respondido; no entanto, ainda há uma provação a cumprir para que possa integrar oficialmente nossas fileiras.
+Esta é uma atividade de reflexão pessoal, que visa identificar pontos de Tensão Filosóficas em suas convicções.
+
+Após a realização deste exercício, você desenvolverá um ensaio, como uma monografia, uma redação, um texto no qual você irá expor os pontos de tensão revelados pelo exercício, e dissertará sobre como você se relaciona com essas situações.
+Seu texto deverá ser baseado no exercício proposto pelo “Check-up Filosófico” (presente no arquivo em anexo desta mensagem) e *abordará obrigatoriamente as perguntas*:
+● Você é consciente das suas tensões?
+● Você trabalha de que forma com elas?
+
+Após concluir a feitura de sua monografia, submeta por aqui o arquivo em PDF para avaliação e devolutiva.
+Junto com sua Monografia, envie aqui também:
+●  *Documento de identidade válido para território nacional,*
+
+Ao passar por esta prova, o não mais profano e agora .|.Aprendiz.|. iniciará seu 'Batismo de Alinhamento', que consiste nas demais atividades deste curso, com o objetivo de instruir o incauto na cultura e prática da OGOM, antes que adentres oficialmente o corpo de nossa Irmandade.
+Dúvidas podem ser sanadas aqui neste canal.
+
+📄 Acesse o exercício:
+https://drive.google.com/file/d/14IosmuVi4u7ITZjtC5MBMAbrt3g4nrVA/view?usp=sharing
+`;
 
 
 // sessões: chave `${channelId}:${userId}` -> { index, answers, ... }
@@ -445,6 +465,10 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
+    if (command === 'tensoes') {
+       await message.channel.send(textotensoes);
+       return;
+    }
     
    if (command === 'synfalar') {
       // só mestres podem usar
